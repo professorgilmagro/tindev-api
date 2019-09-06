@@ -17,7 +17,13 @@ const DevSchema = new Schema(
 		},
 		location: String,
 		public_repos: Number,
-		since: Date
+		since: Date,
+		likes: [{
+			type: Schema.Types.ObjectId
+		}],
+		unlikes: [{
+			type: Schema.Types.ObjectId
+		}],
 	},
 	{
 		timestamps: true
