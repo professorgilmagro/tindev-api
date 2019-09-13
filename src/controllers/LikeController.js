@@ -26,7 +26,7 @@ module.exports = {
 
 			// emite uma mensagem de match para o dev que recebeu o like
 			if (targetSocket) {
-				req.io.to(targetDev).emit('match', loggedSocket);
+				req.io.to(targetSocket).emit('match', loggedDev);
 				console.log('IT`S A MATCH TARGET! %s', targetDev._id);
 			}
 		}

@@ -19,6 +19,7 @@ io.on('connection', socket => {
 	const { user } = socket.handshake.query;
 	connectedUsers[user] = socket.id;
 	console.log('Nova connexão IO %s@%s', user, socket.id);
+	console.table(connectedUsers);
 });
 
 app.use((req, res, next) => {

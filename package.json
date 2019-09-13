@@ -6,7 +6,7 @@
 	"author": "Gilmar Soares <professorgilmagro@gmail.com>",
 	"license": "MIT",
 	"scripts": {
-		"start": "NODE_ENV=PRODUCTION node src/server.js",
+		"start": "NODE_ENV=production node src/server.js",
 		"dev": "NODE_ENV=dev nodemon src/server.js"
 	},
 	"dependencies": {
