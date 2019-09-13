@@ -31,7 +31,7 @@ app.use(express.json());
 app.use(cors());
 app.use(routes);
 
-const app_port = process.env.SERVER_PORT;
+const app_port = process.env.SERVER_PORT || process.env.PORT;
 server.listen(app_port, function() {
 	console.log('Listening on port %d', app_port);
 });
