@@ -5,7 +5,7 @@ const LikeController = require('./controllers/LikeController');
 const UnlikeController = require('./controllers/UnlikeController');
 
 routes.get('/', (req, res) => {
-    res.json({ message: `Hello World` });
+	res.json({ message: `Hello World` });
 });
 
 routes.get('/api/v1/devs', DevController.index);

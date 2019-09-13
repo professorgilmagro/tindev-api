@@ -18,16 +18,25 @@ const DevSchema = new Schema(
 		location: String,
 		public_repos: Number,
 		since: Date,
-		likes: [{
-			type: Schema.Types.ObjectId
-		}],
-		unlikes: [{
-			type: Schema.Types.ObjectId
-		}],
+		likes: [
+			{
+				type: Schema.Types.ObjectId
+			}
+		],
+		unlikes: [
+			{
+				type: Schema.Types.ObjectId
+			}
+		]
 	},
 	{
 		timestamps: true
 	}
 );
 
+DevSchema.set('toObject', { virtuals: true });
+DevSchema.set('toJSON', { virtuals: true });
+DevSchema.virtual('languages')
+	.get(() => this.__languages)
+	.set(val => (this.__languages = val));
 module.exports = model('Dev', DevSchema);
