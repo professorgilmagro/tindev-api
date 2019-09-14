@@ -8,19 +8,17 @@ class DevController {
     }
 
     async index(req, res) {
-        const loggedDev = await Dev.findById(req.headers.user);
+        const id = req.headers.user;
+        const type = req.params.filterBy;
+        const loggedDev = await Dev.findById(id);
 
         if (!loggedDev) {
             return res.status(401).json({ message: 'Usuário não logado' });
         }
 
-        const dev_list = await Dev.find({
-            $and: [
-                { _id: { $ne: loggedDev._id } },
-                { _id: { $nin: loggedDev.likes } },
-                { _id: { $nin: loggedDev.unlikes } }
-            ]
-        }).populate('repositories');
+        const dev_list = await Dev.find(
+            this.__getFilters(type, loggedDev)
+        ).populate('repositories');
 
         res.json(dev_list);
     }
@@ -84,6 +82,28 @@ class DevController {
         dev.repositories = repositories;
         await dev.save();
         return true;
+    }
+
+    __getFilters(type, dev) {
+        if (type === 'unlikeds') {
+            return {
+                $and: [{ _id: { $in: dev.unlikes } }]
+            };
+        }
+
+        if (type === 'likeds') {
+            return {
+                $and: [{ _id: { $in: dev.likes } }]
+            };
+        }
+
+        return {
+            $and: [
+                { _id: { $ne: dev._id } },
+                { _id: { $nin: dev.likes } },
+                { _id: { $nin: dev.unlikes } }
+            ]
+        };
     }
 }
 
