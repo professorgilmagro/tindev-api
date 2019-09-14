@@ -20,21 +20,7 @@ class DevController {
 				{ _id: { $nin: loggedDev.likes } },
 				{ _id: { $nin: loggedDev.unlikes } }
 			]
-		});
-
-		// const list = [];
-		// await dev_list.map(async (dev, index) => {
-		// 	const languages = [];
-		// 	const repos = await Repository.find({ dev_id: dev._id });
-		// 	repos.map(({ language }) => {
-		// 		if (language && !languages.includes(language)) {
-		// 			languages.push(language);
-		// 		}
-		// 	});
-		// 	console.log('oi');
-		// 	dev.languages = languages;
-		// 	list.push(dev);
-		// });
+		}).populate('repositories');
 
 		res.json(dev_list);
 	}
@@ -44,11 +30,8 @@ class DevController {
 
 		const userExists = await Dev.findOne({ user: username });
 		if (userExists) {
-			const hasRepositories = await Repository.findOne({
-				dev_id: userExists._id
-			});
-
-			if (!hasRepositories) {
+			const repos = userExists.repositories;
+			if (repos !== undefined || repos.lenght === 0) {
 				await this.__fillRepositories(userExists);
 			}
 
@@ -82,18 +65,24 @@ class DevController {
 			return false;
 		});
 
-		gitRepos.data.map(async repo => {
-			await Repository.create({
-				dev_id: dev._id,
-				name: repo.name,
-				url: repo.url,
-				size: repo.size,
-				language: repo.language
-			}).catch(error => {
-				console.table(error);
-			});
-		});
+		const repositories = [];
+		await Promise.all(
+			gitRepos.data.map(async repo => {
+				const rep = await Repository.create({
+					dev_id: dev._id,
+					name: repo.name,
+					url: repo.url,
+					size: repo.size,
+					language: repo.language
+				}).catch(error => {
+					console.table(error);
+				});
+				repositories.push(rep._id);
+			})
+		);
 
+		dev.repositories = repositories;
+		await dev.save();
 		return true;
 	}
 }

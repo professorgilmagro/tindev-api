@@ -27,16 +27,12 @@ const DevSchema = new Schema(
 			{
 				type: Schema.Types.ObjectId
 			}
-		]
+		],
+		repositories: [{ type: Schema.Types.ObjectId, ref: 'Repository' }]
 	},
 	{
 		timestamps: true
 	}
 );
 
-DevSchema.set('toObject', { virtuals: true });
-DevSchema.set('toJSON', { virtuals: true });
-DevSchema.virtual('languages')
-	.get(() => this.__languages)
-	.set(val => (this.__languages = val));
 module.exports = model('Dev', DevSchema);

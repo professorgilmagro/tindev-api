@@ -3,9 +3,8 @@ const { Schema, model } = require('mongoose');
 const RepositorySchema = new Schema(
 	{
 		dev_id: {
-			type: String,
-			required: true,
-			tags: { index: true }
+			type: Schema.Types.ObjectId,
+			ref: 'Repository'
 		},
 		name: {
 			type: String,

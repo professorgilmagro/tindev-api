@@ -10,6 +10,11 @@ module.exports = {
 				.replace('[PASSWORD]', process.env.DB_PASSWORD)
 				.replace('[HOST]', process.env.DB_HOST)
 				.replace('[COLLECTION_NAME]', process.env.DB_COLLECTION_NAME);
+		},
+		options: {
+			useUnifiedTopology: true,
+			useNewUrlParser: true,
+			useCreateIndex: true
 		}
 	}
 };

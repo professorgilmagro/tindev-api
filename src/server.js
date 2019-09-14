@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
-const dbConfig = require('./config/db');
+const { mongo: dbMongoConf } = require('./config/db');
 const mongoose = require('mongoose');
 const routes = require('./routes');
 const cors = require('cors');
@@ -10,9 +10,7 @@ const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
-mongoose.connect(dbConfig.mongo.getConnectionString(), {
-	useNewUrlParser: true
-});
+mongoose.connect(dbMongoConf.getConnectionString(), dbMongoConf.options);
 
 const connectedUsers = {};
 io.on('connection', socket => {
