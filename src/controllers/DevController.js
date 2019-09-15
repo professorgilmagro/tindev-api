@@ -40,13 +40,19 @@ class DevController {
 
 		const gitRes = await githubApi
 			.get(`/users/${username}`)
-			.catch(error => {
-				res.status(404).json({ message: 'Usuário não encontrado' });
+			.catch(({ response }) => {
+				console.log(
+					`${response.headers.status} - ${response.config.url}`
+				);
 			});
+
+		if (gitRes === undefined || gitRes.data === undefined) {
+			return res.status(404).json({ message: 'Usuário não encontrado' });
+		}
 
 		const devInfo = gitRes.data;
 		const dev = await Dev.create({
-			name: devInfo.name,
+			name: devInfo.name || 'Anonymous',
 			user: devInfo.login,
 			bio: devInfo.bio,
 			avatar: devInfo.avatar_url,
